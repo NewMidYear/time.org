@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Aktualny czas w Eldorii</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+  /* Reset całkowity */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #0f001f; /* lub inny kolor tła */
+    overflow-x: hidden;
+  }
+
+  body {
+    position: relative;
+  }
+    body {
+      margin: 0;
+      padding: 40px;
+      background-color: #fff;
+      color: #000;
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1 {
+      font-size: 2.4em;
+      font-weight: 900;
+      margin-bottom: 40px;
+    }
+
+    .time {
+      font-size: 18vw;
+      font-weight: 900;
+      text-align: center;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 30px;
+      line-height: 1.2;
+      width: 100%;
+    }
+
+    .sun-times {
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #000;
+    }
+
+    .date-block {
+      text-align: right;
+    }
+
+    .date {
+      font-size: 1.8em;
+      font-weight: 700;
+    }
+
+    .holiday {
+      font-size: 1.1em;
+      font-weight: 400;
+      color: #000;
+      margin-top: 4px;
+    }
+
+    .city-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 60px;
+    }
+
+    .city-card {
+      background-color: #f0f0f0;
+      color: #000;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .city-card:hover {
+      background-color: #e0e0e0;
+      transform: scale(1.03);
+    }
+
+    .city-time {
+      font-size: 1.6em;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .city-name {
+      font-size: 1.1em;
+    }
+   .alt-section {
+  background-color: #fce4ec; /* delikatny róż */
+  padding: 40px;
+  border-radius: 10px;
+  margin-top: 60px;
+}
+#search-results li {
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #333;
+}
+#search-results li:hover {
+  background: #2a0044;
+}
+  </style>
+</head>
+<body>
+<header style="background: #0f001f; color: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000;">
+  <div style="font-size: 1.4em; font-weight: bold;">time.org</div>
+
+  <div style="display: flex; align-items: center; gap: 20px;">
+    <!-- Ikona lupy -->
+    <button onclick="toggleSearch()" style="background: none; border: none; color: #fff; font-size: 1.2em; cursor: pointer;">🔍</button>
+
+    <!-- Ikona hamburgera -->
+    <button onclick="scrollToFooter()" style="background: none; border: none; color: #fff; font-size: 1.4em; cursor: pointer;">☰</button>
+  </div>
+</header>
+
+<!-- Pasek wyszukiwania -->
+<div id="search-bar" style="display: none; background: #1b0034; padding: 10px 20px;">
+  <input type="text" id="search-input" placeholder="Szukaj miasta lub państwa..." oninput="handleSearch()" style="width: 100%; padding: 10px; font-size: 1em; border-radius: 5px; border: none;">
+  <ul id="search-results" style="margin-top: 10px; list-style: none; padding: 0; color: #fff;"></ul>
+</div>
+
+  <h1>Aktualny czas w Eldorii</h1>
+  <div class="time" id="clock">--:--:--</div>
+
+  <div class="info-bar">
+    <div class="sun-times" id="sunInfo">Słońce: ↑ --:-- ↓ --:-- (--h --m)</div>
+    <div class="date-block">
+      <div class="date" id="date">--</div>
+      <div class="holiday" id="holiday"></div>
+    </div>
+  </div>
+
+  <div class="city-grid">
+    <a href="mysthollow.html" class="city-card">
+      <div class="city-time" id="time-mysthollow">--:--</div>
+      <div class="city-name">Mysthollow</div>
+    </a>
+    <a href="zephyria.html" class="city-card">
+      <div class="city-time" id="time-zephyria">--:--</div>
+      <div class="city-name">Zephyria</div>
+    </a>
+    <a href="thornwick.html" class="city-card">
+      <div class="city-time" id="time-thornwick">--:--</div>
+      <div class="city-name">Thornwick</div>
+    </a>
+    <a href="solara.html" class="city-card">
+      <div class="city-time" id="time-solara">--:--</div>
+      <div class="city-name">Solara</div>
+    </a>
+  </div>
+
+<div class="alt-section">
+<hr style="margin: 60px 0; border: none; border-top: 1px solid #ccc;">
+
+<section>
+  <h2 style="font-size: 1.6em; font-weight: 700; margin-bottom: 20px;">
+    Informacje o strefie czasowej w: <strong>Eldoria</strong>
+  </h2>
+
+  <p style="font-size: 5.5em; font-weight: 900; margin: 0 0 10px 0;">
+    UTC +2
+  </p>
+
+  <p style="font-size: 2.4em; margin: 0 0 10px 0;">
+    <strong>Central Eldorian Summer Time</strong> (CEST)<br>
+    zawsze taki sam jak w <strong>Mysthollow</strong>
+  </p>
+
+  <p style="font-size: 0.7em; color: #444; margin: 10px 0;">
+    ▪ Od <strong>10 października 2025</strong>: <strong>UTC +1</strong> / Central Eldorian Time (CET)
+  </p>
+
+  <p style="font-size: 0.7em; color: #444; margin: 0;">
+    ▪ Identyfikator strefy czasowej IANA dla Eldorii to <strong>Eldoria/Mysthollow</strong>.
+  </p>
+
+
+<!-- ZMIANA NA CZAS LETNI -->
+<div style="display: flex; align-items: center; margin-top: 40px; gap: 30px; flex-wrap: wrap;">
+  <!-- Kafelek z datą -->
+  <div style="background-color: #fff; color: #000; border-radius: 10px; padding: 20px 30px; text-align: center; min-width: 140px;">
+    <div style="font-size: 1.2em; font-weight: 600;">kwietnia</div>
+    <div style="font-size: 3em; font-weight: 900;">10</div>
+    <div style="font-size: 1em; color: #666;">czwartek</div>
+    <div style="font-size: 0.9em; color: #999;">2025</div>
+  </div>
+
+  <!-- Opis zmiany -->
+  <div style="flex: 1; min-width: 250px;">
+    <p style="font-size: 1.1em; font-weight: 700; margin-bottom: 10px;">
+      Ostatnia zmiana: Czas letni zaczął się
+    </p>
+    <ul style="list-style: none; padding-left: 0; margin: 0;">
+      <li style="margin-bottom: 6px;">▪ Zmieniono na <strong>UTC +2</strong> / Central Eldorian Summer Time (CEST).</li>
+      <li>▪ Czas przesunięto do przodu o jedną godzinę z <strong>16:00</strong> na <strong>17:00</strong> czasu lokalnego.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ZMIANA NA CZAS ZIMOWY -->
+<div style="display: flex; align-items: center; margin-top: 40px; gap: 30px; flex-wrap: wrap;">
+  <!-- Kafelek z datą -->
+  <div style="background-color: #fff; color: #000; border-radius: 10px; padding: 20px 30px; text-align: center; min-width: 140px;">
+    <div style="font-size: 1.2em; font-weight: 600;">października</div>
+    <div style="font-size: 3em; font-weight: 900;">10</div>
+    <div style="font-size: 1em; color: #666;">piątek</div>
+    <div style="font-size: 0.9em; color: #999;">2025</div>
+  </div>
+
+  <!-- Opis zmiany -->
+  <div style="flex: 1; min-width: 250px;">
+    <p style="font-size: 1.1em; font-weight: 700; margin-bottom: 10px;">
+      Następna zmiana: Czas zimowy zaczyna się
+    </p>
+    <ul style="list-style: none; padding-left: 0; margin: 0;">
+      <li style="margin-bottom: 6px;">▪ Zmienia na <strong>UTC +1</strong> / Central Eldorian Time (CET).</li>
+      <li>▪ Czas zostanie przesunięty do tyłu o jedną godzinę z <strong>17:00</strong> na <strong>16:00</strong> czasu lokalnego.</li>
+    </ul>
+  </div>
+</div>
+</div>
+<section style="background-color: #1e1e1e; color: #fff; padding: 40px; border-radius: 10px; margin-top: 60px;">
+<hr style="margin: 80px 0 60px 0; border: none; border-top: 1px solid #444;">
+
+<section style="color: #fff;">
+  <h2 style="font-size: 1.6em; font-weight: 700; margin-bottom: 20px;">
+    Różnica czasu w stosunku do Eldorii
+  </h2>
+
+  <table style="width: 100%; max-width: 700px; border-collapse: collapse; font-size: 1.05em;">
+    <thead>
+      <tr>
+        <th style="text-align: left; color: #ccc;">Miasto</th>
+        <th style="text-align: right; color: #ccc;">Różnica</th>
+        <th style="text-align: left;">&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Frostmere, Glaciera</td>
+        <td style="text-align: right;">−3 godz.</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 30px; height: 6px; background: #ef5350; position: absolute; left: 20px;"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Thornwick, Virelia</td>
+        <td style="text-align: right;">−2 godz.</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 20px; height: 6px; background: #ff7043; position: absolute; left: 30px;"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Zephyria, Luminar</td>
+        <td style="text-align: right;">−1 godz.</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 10px; height: 6px; background: #ffa726; position: absolute; left: 40px;"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Mysthollow, Aeronia</td>
+        <td style="text-align: right;">0</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 6px; height: 6px; background: #9e9e9e; position: absolute; left: 47px;"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Solara, Nytherra</td>
+        <td style="text-align: right;">+1 godz.</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 10px; height: 6px; background: #81c784; position: absolute; left: 53px;"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Azurebay, Caelondia</td>
+        <td style="text-align: right;">+2 godz.</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 20px; height: 6px; background: #66bb6a; position: absolute; left: 53px;"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Drakenshire, Volundar</td>
+        <td style="text-align: right;">+3 godz.</td>
+        <td>
+          <div style="width: 100px; height: 6px; background: #333; position: relative;">
+            <div style="width: 30px; height: 6px; background: #388e3c; position: absolute; left: 53px;"></div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+</section>
+
+<section style="margin: 0; padding: 0; background: #1b0034;">
+  <img 
+    src="https://newmidyear.github.io/time.org/eldoria.png" 
+    alt="Mapa Eldorii" 
+    style="width: 100%; height: auto; display: block;"
+>
+</section>
+
+<footer style="background: #0f001f; color: #ccc; padding: 40px 20px; font-size: 0.95em;">
+  <div style="max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; gap: 40px;">
+    
+    <!-- Kolumna 1 -->
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="color: #fff; margin-bottom: 10px;">Czas i narzędzia</h4>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><a href="#czas-teraz" style="color: #ccc; text-decoration: none;">Dokładny czas teraz</a></li>
+        <li><a href="#czas-tutaj-tam" style="color: #ccc; text-decoration: none;">Czas tutaj i tam</a></li>
+        <li><a href="#strefy" style="color: #ccc; text-decoration: none;">Strefy czasowe</a></li>
+        <li><a href="#zegar" style="color: #ccc; text-decoration: none;">Zegar</a></li>
+        <li><a href="#kalendarz" style="color: #ccc; text-decoration: none;">Kalendarz</a></li>
+      </ul>
+    </div>
+
+    <!-- Kolumna 2 -->
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="color: #fff; margin-bottom: 10px;">Informacje</h4>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><a href="#aplikacje" style="color: #ccc; text-decoration: none;">Aplikacje</a></li>
+        <li><a href="#widżety" style="color: #ccc; text-decoration: none;">Widżety</a></li>
+        <li><a href="#newsletter" style="color: #ccc; text-decoration: none;">Newsletter</a></li>
+        <li><a href="#polityka" style="color: #ccc; text-decoration: none;">Polityka prywatności</a></li>
+        <li><a href="#kontakt" style="color: #ccc; text-decoration: none;">Kontakt</a></li>
+      </ul>
+    </div>
+
+    <!-- Kolumna 3 -->
+    <div style="flex: 1; min-width: 200px;">
+      <h4 style="color: #fff; margin-bottom: 10px;">Narzędzia techniczne</h4>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><a href="#unix" style="color: #ccc; text-decoration: none;">Zegar uniksowy</a></li>
+        <li><a href="#konwerter" style="color: #ccc; text-decoration: none;">Konwerter czasu</a></li>
+        <li><a href="#dostosuj" style="color: #ccc; text-decoration: none;">Dostosuj wygląd</a></li>
+        <li><a href="#faq" style="color: #ccc; text-decoration: none;">FAQ</a></li>
+        <li><a href="#info" style="color: #ccc; text-decoration: none;">O time.org</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px; font-size: 0.85em; color: #777;">
+    © 2025 <strong>time.org</strong> • Wszystkie prawa zastrzeżone
+  </div>
+</footer>
+
+
+
+
+
+  <script src="https://unpkg.com/suncalc@1.9.0/suncalc.js"></script>
+  <script>
+    const holidays = {
+      "07-04": "Dzień Niepodległości (USA)",
+      "12-25": "Boże Narodzenie",
+      "01-01": "Nowy Rok",
+      "11-11": "Święto Niepodległości (PL)"
+    };
+
+    const latitude = 50.95;  // Pieńsk
+    const longitude = 28.3;
+
+    function updateClock() {
+  const localNow = new Date();
+  const utcNow = new Date(localNow.getTime() + localNow.getTimezoneOffset() * 60000);
+
+  // Zmiana czasu: 10 października 2025, 17:00 czasu Eldorii (czyli 15:00 UTC)
+  const transitionDate = new Date('2025-10-10T15:00:00Z');
+  const offset = utcNow >= transitionDate ? 1 : 2;
+
+  // Czas Eldorii = czas UTC + offset
+  const eldoriaTime = new Date(utcNow.getTime() + offset * 60 * 60 * 1000);
+
+  const hh = String(eldoriaTime.getHours()).padStart(2, '0');
+  const mm = String(eldoriaTime.getMinutes()).padStart(2, '0');
+  const ss = String(eldoriaTime.getSeconds()).padStart(2, '0');
+  document.getElementById('clock').textContent = `${hh}:${mm}:${ss}`;
+
+  const days = ['niedziela','poniedziałek','wtorek','środa','czwartek','piątek','sobota'];
+  const months = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+  const dayName = days[eldoriaTime.getDay()];
+  const day = eldoriaTime.getDate();
+  const month = months[eldoriaTime.getMonth()];
+  const year = eldoriaTime.getFullYear();
+  document.getElementById('date').textContent = `${dayName}, ${day} ${month} ${year}`;
+
+  const key = `${String(eldoriaTime.getMonth()+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+  document.getElementById('holiday').textContent = holidays[key] || '';
+}
+
+
+    function updateCityTimes() {
+      const now = new Date();
+      const offsets = {
+        "mysthollow": 0,
+        "zephyria": 2,
+        "thornwick": -3,
+        "solara": 5
+      };
+
+      for (const [id, offset] of Object.entries(offsets)) {
+        const cityTime = new Date(now.getTime() + offset * 60 * 60 * 1000);
+        const hh = String(cityTime.getHours()).padStart(2, '0');
+        const mm = String(cityTime.getMinutes()).padStart(2, '0');
+        const el = document.getElementById(`time-${id}`);
+        if (el) el.textContent = `${hh}:${mm}`;
+      }
+    }
+
+function updateSunTimes() {
+  const now = new Date();
+  const times = SunCalc.getTimes(now, latitude, longitude);
+  const sunriseUTC = times.sunrise;
+  const sunsetUTC = times.sunset;
+
+  // Sprawdź, czy obowiązuje czas letni (kwiecień–październik)
+  const month = now.getMonth(); // 0 = styczeń, 3 = kwiecień, 9 = październik
+  const isSummerTime = month >= 3 && month <= 9;
+  const offsetHours = isSummerTime ? 1 : 0;
+
+  // Dodaj przesunięcie do czasu UTC
+  const sunrise = new Date(sunriseUTC.getTime() + offsetHours * 60 * 60 * 1000);
+  const sunset = new Date(sunsetUTC.getTime() + offsetHours * 60 * 60 * 1000);
+
+  const format = date => `${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+
+  const durationMs = sunset - sunrise;
+  const hours = Math.floor(durationMs / (1000 * 60 * 60));
+  const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+
+  document.getElementById('sunInfo').textContent =
+    `Słońce: ↑ ${format(sunrise)} ↓ ${format(sunset)} (${hours}h ${minutes}m)`;
+}
+
+    // Aktualizacja co sekundę zegara i miast
+    setInterval(() => {
+      updateClock();
+      updateCityTimes();
+    }, 1000);
+
+    // Aktualizacja danych o słońcu raz dziennie
+    updateSunTimes();
+    updateClock();
+    updateCityTimes();
+
+    // Odśwież dane o słońcu o północy
+    const now = new Date();
+    const msUntilMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1) - now;
+    setTimeout(() => {
+      updateSunTimes();
+      setInterval(updateSunTimes, 24 * 60 * 60 * 1000);
+    }, msUntilMidnight);
+
+const cities = [
+  { name: "Aetheris", file: "aetheris.html" },
+  { name: "Mysthollow", file: "mysthollow.html" },
+  { name: "Zephyria", file: "zephyria.html" },
+  { name: "Thornwick", file: "thornwick.html" },
+  { name: "Solara", file: "solara.html" }
+];
+
+function toggleSearch() {
+  const bar = document.getElementById('search-bar');
+  bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
+  document.getElementById('search-input').focus();
+}
+
+function handleSearch() {
+  const input = document.getElementById('search-input').value.toLowerCase();
+  const results = document.getElementById('search-results');
+  results.innerHTML = '';
+
+  if (input.length === 0) return;
+
+  const matches = cities.filter(city => city.name.toLowerCase().includes(input));
+  matches.forEach(city => {
+    const li = document.createElement('li');
+    li.textContent = city.name;
+    li.onclick = () => window.location.href = city.file;
+    results.appendChild(li);
+  });
+}
+
+function scrollToFooter() {
+  const footer = document.querySelector('footer');
+  if (footer) footer.scrollIntoView({ behavior: 'smooth' });
+}
+  </script>
+</body>
+</html>
